@@ -1,0 +1,33 @@
+https://www.youtube.com/watch?v=TrLAx27Npns
+
+// also there is bash script for audo generate VirtualHost 
+
+// to create your directory of the project
+sudo mkdir -p /var/www/project-folder-name
+
+//now giving permissions to your project directory 
+sudo chown -R $USER:$USER /var/www/project-folder-name
+
+// now copy the site configuratoin from default.config to your new site config this a virtualHost configuratoin 
+sudo cp /etc/apache2/sites-available/000-default.config /etc/apache2/sites-available/project-folder-name.config
+// VirtualHost settings  
+<VirtualHost *:80>
+	ServerName vendor.savyour.local
+	ServerAlias *.ngrok.io
+	ServerAdmin webmaster@localhost
+	DocumentRoot /var/www/html/vendor-panel/public/
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+        <Directory /var/www/html/vendor-panel/public/>
+           Options Indexes FollowSymLinks
+           AllowOverride All
+           Require all granted
+        </Directory>
+</VirtualHost>
+
+// now enable sites 
+sudo a2ensite project-folder-name.config
+
+// now reload the apache 2
+sudo systemctl reload apache2
+
